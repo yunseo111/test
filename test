@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
@@ -7,22 +6,21 @@ const int ROWS = 5;
 const int COLS = 4;
 const int CARS = 3;
 
-vector<vector<vector<int>>> seats(CARS, vector<vector<int>>(ROWS, vector<int>(COLS, 0)));
+int seats[CARS][ROWS][COLS] = { 0 };
 
 int totalAdults = 0, totalTeens = 0;
 
 void displaySeats() {
     for (int c = 0; c < CARS; c++) {
-        cout << "\n1 2   3 4 (" << c + 1 << "호차)\n";  // 호차 번호 출력
+        cout << "\n1 2   3 4 (" << c + 1 << "\ud638\ucc28)\n"; 
         cout << "------------------\n";
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                if (j == 2) cout << "  "; // 가운데 통로
+                if (j == 2) cout << "  "; 
                 cout << seats[c][i][j] << " ";
             }
             cout << endl;
         }
-        
     }
 }
 
@@ -40,17 +38,17 @@ void reserveSeat() {
 
     for (int i = 0; i < totalTickets; i++) {
         int car, row, col;
-        cout << "몇 호차를 예약 하시겠습니까? ";
+        cout << "몇 호차를 예약 하시겠습니까?\n";
         cin >> car;
         if (car < 1 || car > CARS) {
             cout << "예약 가능한 호차가 아닙니다.\n";
             i--;
             continue;
         }
-        cout << "몇 열, 몇 번째 좌석을 예약하시겠습니까? ";
+        cout << "몇 열, 몇 번째 좌석을 예약하시겠습니까?\n";
         cin >> col >> row;
 
-        row--; // 1부터 입력된 값을 0 기반 인덱스로 변환
+        row--;
         col--;
 
         if (col < 0 || col >= COLS || row < 0 || row >= ROWS) {
@@ -67,8 +65,8 @@ void reserveSeat() {
 
         seats[car - 1][row][col] = 1;
         cout << "예약이 되었습니다!\n";
-        displaySeats();
     }
+    displaySeats();
 }
 
 void modifyReservation() {
@@ -122,8 +120,8 @@ void modifyReservation() {
         seats[car - 1][row][col] = 0;
         seats[newCar - 1][newRow][newCol] = 1;
         cout << "좌석이 변경되었습니다!\n";
-        displaySeats();
     }
+    displaySeats();
 }
 
 void calculateTotalAmount() {
@@ -160,3 +158,4 @@ int main() {
         }
     }
 }
+
