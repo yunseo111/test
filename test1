@@ -1,0 +1,162 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+const int ROWS = 5;
+const int COLS = 4;
+const int CARS = 3;
+
+vector<vector<vector<int>>> seats(CARS, vector<vector<int>>(ROWS, vector<int>(COLS, 0)));
+
+int totalAdults = 0, totalTeens = 0;
+
+void displaySeats() {
+    for (int c = 0; c < CARS; c++) {
+        cout << "\n1 2   3 4 (" << c + 1 << "호차)\n";  // 호차 번호 출력
+        cout << "------------------\n";
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                if (j == 2) cout << "  "; // 가운데 통로
+                cout << seats[c][i][j] << " ";
+            }
+            cout << endl;
+        }
+        
+    }
+}
+
+void reserveSeat() {
+    int adultCount, teenCount;
+    cout << "\n\n성인(25000원): ";
+    cin >> adultCount;
+    cout << "\n청소년(18000원): ";
+    cin >> teenCount;
+
+    totalAdults += adultCount;
+    totalTeens += teenCount;
+
+    int totalTickets = adultCount + teenCount;
+
+    for (int i = 0; i < totalTickets; i++) {
+        int car, row, col;
+        cout << "몇 호차를 예약 하시겠습니까? ";
+        cin >> car;
+        if (car < 1 || car > CARS) {
+            cout << "예약 가능한 호차가 아닙니다.\n";
+            i--;
+            continue;
+        }
+        cout << "몇 열, 몇 번째 좌석을 예약하시겠습니까? ";
+        cin >> col >> row;
+
+        row--; // 1부터 입력된 값을 0 기반 인덱스로 변환
+        col--;
+
+        if (col < 0 || col >= COLS || row < 0 || row >= ROWS) {
+            cout << "예약 가능한 좌석이 아닙니다.\n";
+            i--;
+            continue;
+        }
+
+        if (seats[car - 1][row][col] == 1) {
+            cout << "이미 예약된 좌석입니다. 다른 자리를 선택하세요.\n";
+            i--;
+            continue;
+        }
+
+        seats[car - 1][row][col] = 1;
+        cout << "예약이 되었습니다!\n";
+        displaySeats();
+    }
+}
+
+void modifyReservation() {
+    int changeCount;
+    cout << "변경할 좌석의 갯수를 입력하세요: ";
+    cin >> changeCount;
+
+    for (int i = 0; i < changeCount; i++) {
+        int car, row, col, newCar, newRow, newCol;
+
+        cout << "현재 좌석과 바꿀 좌석을 입력하세요\n현재 좌석(H호차, N열, M번째): ";
+        cin >> car >> col >> row;
+        row--;
+        col--;
+
+        if (car < 1 || car > CARS || col < 0 || col >= COLS || row < 0 || row >= ROWS) {
+            cout << "현재 좌석이 틀렸습니다. 다시 입력해 주세요.\n";
+            i--;
+            continue;
+        }
+
+        if (seats[car - 1][row][col] == 0) {
+            cout << "현재 좌석이 예약되지 않았습니다. 다시 입력해주세요.\n";
+            i--;
+            continue;
+        }
+
+        cout << "변경 좌석(H호차, N열, M번째): ";
+        cin >> newCar >> newCol >> newRow;
+        newRow--;
+        newCol--;
+
+        if (newCar < 1 || newCar > CARS || newCol < 0 || newCol >= COLS || newRow < 0 || newRow >= ROWS) {
+            cout << "좌석 번호를 다시 입력해 주세요.\n";
+            i--;
+            continue;
+        }
+
+        if (car == newCar && row == newRow && col == newCol) {
+            cout << "똑같은 자리입니다. 다른 좌석을 선택해 주세요.\n";
+            i--;
+            continue;
+        }
+
+        if (seats[newCar - 1][newRow][newCol] == 1) {
+            cout << "이미 예약 되었습니다. 다른 좌석을 선택하세요.\n";
+            i--;
+            continue;
+        }
+
+        seats[car - 1][row][col] = 0;
+        seats[newCar - 1][newRow][newCol] = 1;
+        cout << "좌석이 변경되었습니다!\n";
+        displaySeats();
+    }
+}
+
+void calculateTotalAmount() {
+    int totalAmount = (totalAdults * 25000) + (totalTeens * 18000);
+    cout << "총 결제 금액: " << totalAmount << "원\n";
+    cout << "프로그램을 종료합니다.\n";
+}
+
+int main() {
+    int choice;
+
+    while (true) {
+        cout << "** 기차 예약 시스템 **\n";
+        cout << "1. 좌석 예약시스템\n";
+        cout << "2. 예약 변경\n";
+        cout << "3. 프로그램 종료\n";
+        cout << "번호를 입력하세요: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            displaySeats();
+            reserveSeat();
+            break;
+        case 2:
+            displaySeats();
+            modifyReservation();
+            break;
+        case 3:
+            calculateTotalAmount();
+            return 0;
+        default:
+            cout << "잘못된 입력입니다. 다시 입력하세요.\n";
+        }
+    }
+}
