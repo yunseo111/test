@@ -6,17 +6,17 @@ const int ROWS = 5;
 const int COLS = 4;
 const int CARS = 3;
 
-int seats[CARS][ROWS][COLS] = { 0 };
+int seats[CARS][ROWS][COLS] = {0};
 
 int totalAdults = 0, totalTeens = 0;
 
 void displaySeats() {
     for (int c = 0; c < CARS; c++) {
-        cout << "\n1 2   3 4 (" << c + 1 << "\ud638\ucc28)\n"; 
+        cout << "\n1 2   3 4 (" << c + 1 << "\ud638\ucc28)\n";  // 호차 번호 출력
         cout << "------------------\n";
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                if (j == 2) cout << "  "; 
+                if (j == 2) cout << "  "; // 가운데 통로
                 cout << seats[c][i][j] << " ";
             }
             cout << endl;
@@ -38,14 +38,14 @@ void reserveSeat() {
 
     for (int i = 0; i < totalTickets; i++) {
         int car, row, col;
-        cout << "몇 호차를 예약 하시겠습니까?\n";
+        cout << "몇 호차를 예약 하시겠습니까? ";
         cin >> car;
         if (car < 1 || car > CARS) {
             cout << "예약 가능한 호차가 아닙니다.\n";
             i--;
             continue;
         }
-        cout << "몇 열, 몇 번째 좌석을 예약하시겠습니까?\n";
+        cout << "몇 열, 몇 번째 좌석을 예약하시겠습니까? ";
         cin >> col >> row;
 
         row--;
@@ -158,4 +158,3 @@ int main() {
         }
     }
 }
-
